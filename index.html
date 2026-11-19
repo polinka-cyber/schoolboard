@@ -1,0 +1,1291 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>სკოლების ციფრული დაფა - საგანმანათლებლო პორტალი</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+GO:wght@400;500;600;700;800;900&display=swap');
+    
+    * {
+      font-family: 'Fira GO', sans-serif;
+    }
+
+    body {
+      user-select: none;
+    }
+
+    .theme-emerald {
+      --primary: #00a884;
+      --primary-dark: #008f70;
+      --primary-light: #e6f7f3;
+      --accent: #10b981;
+    }
+    .theme-blue {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --accent: #3b82f6;
+    }
+    .theme-purple {
+      --primary: #7c3aed;
+      --primary-dark: #6d28d9;
+      --primary-light: #f5f3ff;
+      --accent: #8b5cf6;
+    }
+    .theme-crimson {
+      --primary: #dc2626;
+      --primary-dark: #b91c1c;
+      --primary-light: #fef2f2;
+      --accent: #ef4444;
+    }
+    .theme-dark {
+      --primary: #3b82f6;
+      --primary-dark: #1d4ed8;
+      --primary-light: #1e293b;
+      --accent: #60a5fa;
+    }
+
+    .bg-main-primary { background-color: var(--primary); }
+    .bg-main-light { background-color: var(--primary-light); }
+    .text-main-primary { color: var(--primary); }
+    .border-main-primary { border-color: var(--primary); }
+
+    .active-card {
+      background-color: var(--primary);
+      color: white !important;
+      transform: scale(1.02);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+    }
+    .active-card * {
+      color: white !important;
+    }
+
+    .progress-bar-fill {
+      background-color: var(--primary);
+      transition: width 1s linear;
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background-color: rgba(0,0,0,0.12);
+      border-radius: 4px;
+    }
+
+    .landing-bg {
+      background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.88), rgba(241, 245, 249, 0.92)), url('https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=2000&auto=format&fit=crop');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #0f172a 0%, #00a884 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .custom-dropdown-btn {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .custom-dropdown-btn:hover {
+      border-color: #00a884;
+      background: #ffffff;
+      box-shadow: 0 4px 12px -2px rgba(0, 168, 132, 0.12);
+    }
+    .custom-dropdown-menu {
+      transform-origin: top center;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .custom-dropdown-item {
+      transition: all 0.15s ease;
+    }
+    .custom-dropdown-item:hover {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      padding-left: 1.25rem;
+    }
+
+    /* Fullscreen-ში სკოლის დასახელებისა და ზედა ინფორმაციის დამალვა */
+    :fullscreen #dashboardHeader,
+    :-webkit-full-screen #dashboardHeader {
+      display: none !important;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 h-screen w-screen flex flex-col theme-emerald transition-colors duration-300 overflow-hidden" id="appBody">
+
+  <!-- ========================================== -->
+  <!-- 1. LANDING PAGE                            -->
+  <!-- ========================================== -->
+  <div id="landingPage" class="fixed inset-0 z-50 landing-bg flex flex-col overflow-y-auto custom-scrollbar" onclick="closeAllDropdowns(event)">
+    
+    <header class="bg-white/90 backdrop-blur-md px-4 sm:px-8 py-4 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4 z-10 border-b border-slate-200">
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-main-light flex items-center justify-center border border-slate-200 shadow-sm flex-shrink-0">
+          <i class="fa-solid fa-school text-xl sm:text-2xl text-main-primary"></i>
+        </div>
+        <div>
+          <h1 class="text-lg sm:text-2xl font-extrabold text-slate-800 tracking-wide">
+            სკოლების ციფრული დაფა
+          </h1>
+          <p class="text-[11px] sm:text-xs text-slate-500 font-semibold">საქართველოს განათლებისა და მეცნიერების სამინისტრო</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-1 max-w-5xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-12 flex flex-col justify-center items-center">
+      
+      <div class="text-center mb-8 sm:mb-10 max-w-3xl">
+        <h2 class="text-3xl sm:text-5xl font-black text-slate-900 tracking-tight leading-tight sm:leading-snug">
+          აირჩიეთ დაწესებულება <br class="hidden sm:block">
+          <span class="text-gradient">ციფრულ დაფაზე გადასასვლელად</span>
+        </h2>
+        
+        <p class="mt-3 text-xs sm:text-sm text-slate-500 font-medium max-w-xl mx-auto">
+          მართეთ გაკვეთილების განრიგი, შესვენების ტაიმერები და საჯარო განცხადებები რეალურ დროში.
+        </p>
+      </div>
+
+      <div class="w-full bg-white/95 backdrop-blur-md rounded-3xl shadow-xl border border-white/80 p-5 sm:p-8 mb-6 sm:mb-8 relative z-20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          
+          <div class="relative dropdown-container">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-map-location-dot text-main-primary"></i> რეგიონი
+            </label>
+            <button onclick="toggleDropdown('ddRegion', event)" id="ddRegionBtn" class="w-full custom-dropdown-btn rounded-2xl px-4 py-3.5 text-sm font-bold text-slate-800 flex justify-between items-center outline-none">
+              <span id="ddRegionLabel" class="truncate">ყველა რეგიონი</span>
+              <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-200" id="ddRegionArrow"></i>
+            </button>
+
+            <div id="ddRegion" class="custom-dropdown-menu hidden absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-2xl shadow-2xl py-2 max-h-60 overflow-y-auto custom-scrollbar z-50 opacity-0 scale-95">
+            </div>
+          </div>
+
+          <div class="relative dropdown-container">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-city text-main-primary"></i> ქალაქი / მუნიციპალიტეტი
+            </label>
+            <button onclick="toggleDropdown('ddCity', event)" id="ddCityBtn" class="w-full custom-dropdown-btn rounded-2xl px-4 py-3.5 text-sm font-bold text-slate-800 flex justify-between items-center outline-none opacity-60 pointer-events-none">
+              <span id="ddCityLabel" class="truncate">ჯერ აირჩიეთ რეგიონი</span>
+              <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-200" id="ddCityArrow"></i>
+            </button>
+
+            <div id="ddCity" class="custom-dropdown-menu hidden absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-2xl shadow-2xl py-2 max-h-60 overflow-y-auto custom-scrollbar z-50 opacity-0 scale-95">
+            </div>
+          </div>
+
+          <div class="relative dropdown-container">
+            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+              <i class="fa-solid fa-school text-main-primary"></i> სკოლა
+            </label>
+            <button onclick="toggleDropdown('ddSchool', event)" id="ddSchoolBtn" class="w-full custom-dropdown-btn rounded-2xl px-4 py-3.5 text-sm font-bold text-slate-800 flex justify-between items-center outline-none opacity-60 pointer-events-none">
+              <span id="ddSchoolLabel" class="truncate">ჯერ აირჩიეთ ქალაქი</span>
+              <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform duration-200" id="ddSchoolArrow"></i>
+            </button>
+
+            <div id="ddSchool" class="custom-dropdown-menu hidden absolute top-full left-0 right-0 mt-2 bg-white/95 backdrop-blur-xl border border-slate-200/80 rounded-2xl shadow-2xl py-2 max-h-60 overflow-y-auto custom-scrollbar z-50 opacity-0 scale-95">
+            </div>
+          </div>
+
+        </div>
+
+        <div class="mt-6 sm:mt-8 flex justify-center">
+          <button onclick="openDashboardDirect()" class="w-full sm:w-auto px-10 py-4 rounded-xl bg-main-primary text-white font-bold text-sm tracking-wide transition shadow-lg hover:opacity-90 flex items-center justify-center gap-3">
+            <span>დაფის გახსნა</span>
+            <i class="fa-solid fa-arrow-right text-white/90"></i>
+          </button>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 2. MAIN DASHBOARD MONITOR                  -->
+  <!-- ========================================== -->
+  <header id="dashboardHeader" class="bg-white px-4 sm:px-8 py-3 shadow-md flex justify-between items-center z-10 border-b border-slate-200">
+    <div class="flex items-center gap-3 sm:gap-4">
+      <button onclick="backToLanding()" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition shadow-sm mr-1" title="მთავარ გვერდზე დაბრუნება">
+        <i class="fa-solid fa-house text-main-primary"></i>
+      </button>
+      
+      <div id="schoolLogoContainer" class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-slate-100 hidden items-center justify-center overflow-hidden border border-slate-200 shadow-sm flex-shrink-0">
+        <img id="schoolLogoImg" class="w-full h-full object-cover hidden" alt="School Logo" />
+      </div>
+
+      <div>
+        <h1 class="text-base sm:text-2xl font-extrabold text-slate-800 tracking-wide truncate max-w-[180px] sm:max-w-none" id="schoolTitle">1-ლი საჯარო სკოლა</h1>
+        <p class="text-[10px] sm:text-xs text-slate-500 font-semibold" id="schoolSubtitle">საინფორმაციო მონიტორი</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 sm:gap-4">
+      <div class="text-right mr-1 sm:mr-2">
+        <div class="text-[10px] sm:text-xs text-slate-400 font-bold uppercase tracking-wider">მიმდინარე დრო</div>
+        <div class="text-lg sm:text-2xl font-black text-slate-800 font-mono tracking-tight" id="headerClock">00:00:00</div>
+      </div>
+      
+      <button onclick="toggleFullScreen()" id="fullScreenBtn" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition shadow-sm flex-shrink-0" title="სრული ეკრანი">
+        <i class="fa-solid fa-expand text-lg" id="fullScreenIcon"></i>
+      </button>
+
+      <button onclick="toggleAdminModal()" class="w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center transition shadow-sm flex-shrink-0" title="პარამეტრები">
+        <i class="fa-solid fa-gear text-lg"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN MONITOR LAYOUT -->
+  <main class="flex-1 p-3 sm:p-4 grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 overflow-y-auto lg:overflow-hidden" id="mainContainer">
+
+    <!-- SLIDES SECTION (9/12 ON DESKTOP, SLIGHTLY COMPACT HEIGHT) -->
+    <section class="col-span-1 lg:col-span-9 flex flex-col gap-2.5 h-auto lg:h-full" id="slidesSection">
+      <div class="bg-white rounded-3xl shadow-lg border border-slate-200/80 p-3.5 sm:p-5 flex flex-col relative overflow-hidden h-[430px] lg:h-auto lg:flex-1">
+        <div class="flex justify-between items-center mb-2.5 z-20">
+          <div class="flex items-center gap-2">
+            <i class="fa-solid fa-bullhorn text-main-primary text-lg sm:text-xl"></i>
+            <h2 class="text-base sm:text-xl font-extrabold text-slate-800">განცხადებები</h2>
+          </div>
+          <div class="flex gap-2" id="sliderDots"></div>
+        </div>
+        <div class="flex-1 relative rounded-2xl overflow-hidden bg-slate-900/5 border border-slate-200/80 min-h-[320px]">
+          <div id="slidesWrapper" class="h-full w-full relative"></div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-md border border-slate-200/80 px-4 py-2 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="p-1 bg-slate-50 rounded-xl border border-slate-200 flex-shrink-0">
+            <img id="qrImage" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://school.ge" class="w-9 h-9 sm:w-11 sm:h-11 object-contain" alt="QR Code" />
+          </div>
+          <div>
+            <span class="text-[10px] font-bold text-main-primary uppercase tracking-wider">მობილური ვერსია</span>
+            <h3 class="text-xs sm:text-sm font-bold text-slate-800">დაასკანერეთ QR კოდი</h3>
+            <p class="text-[10px] sm:text-xs text-slate-500">სიახლეების და განრიგის სანახავად</p>
+          </div>
+        </div>
+        <div class="text-xl text-slate-300 pr-2 hidden sm:block">
+          <i class="fa-solid fa-mobile-screen-button"></i>
+        </div>
+      </div>
+    </section>
+
+    <!-- COMPACT SCHEDULE & TIMER SECTION (3/12 ON DESKTOP) -->
+    <section class="col-span-1 lg:col-span-3 flex flex-col gap-3 h-auto lg:h-full" id="scheduleSection">
+      <div class="bg-white rounded-3xl shadow-lg border border-slate-200/80 p-3.5 flex flex-col justify-between relative overflow-hidden">
+        <div class="flex justify-between items-start mb-0.5">
+          <div class="min-w-0 pr-1">
+            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wider" id="statusLabel">სტატუსი</span>
+            <h3 class="text-xs font-extrabold text-slate-800 truncate" id="statusTitle">გაკვეთილის დასრულებამდე</h3>
+          </div>
+          <div class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-main-light text-main-primary flex-shrink-0" id="targetBadge">
+            09:25
+          </div>
+        </div>
+
+        <div class="text-center my-1">
+          <div class="text-2xl sm:text-3xl font-black font-mono tracking-tight text-slate-800" id="countdownDisplay">00:00</div>
+        </div>
+
+        <div class="w-full">
+          <div class="flex justify-between text-[10px] text-slate-500 font-semibold mb-1">
+            <span id="currentLessonText" class="truncate">მე-1 გაკვეთილი</span>
+            <span id="progressPercent" class="ml-1">0%</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden border border-slate-200/60">
+            <div id="progressBar" class="progress-bar-fill h-full rounded-full" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl shadow-lg border border-slate-200/80 p-3.5 flex flex-col h-[270px] lg:h-auto lg:flex-1 overflow-hidden">
+        <div class="flex items-center gap-2 mb-2">
+          <i class="fa-regular fa-clock text-main-primary text-sm"></i>
+          <h2 class="text-xs sm:text-sm font-bold text-slate-800">განრიგი</h2>
+        </div>
+
+        <div class="flex-1 overflow-y-auto pr-1 space-y-1.5 custom-scrollbar" id="scheduleList"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ADMIN CONFIGURATION MODAL -->
+  <div id="adminModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-all duration-300">
+    <div class="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-100">
+      
+      <div class="px-6 sm:px-8 py-4 sm:py-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+        <div class="flex items-center gap-3">
+          <i class="fa-solid fa-sliders text-main-primary text-xl"></i>
+          <div>
+            <h2 class="text-lg sm:text-xl font-bold text-slate-800">მართვის პანელი</h2>
+            <p class="text-[11px] text-slate-500 font-semibold" id="panelRoleHint">სამინისტრო • რესურსცენტრი • დირექტორი • ადმინისტრატორი</p>
+          </div>
+        </div>
+        <button onclick="toggleAdminModal()" class="w-9 h-9 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center transition">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="flex-1 p-6 sm:p-8 overflow-y-auto space-y-8 custom-scrollbar">
+
+        <!-- 0. ROLE HIERARCHY SELECTOR -->
+        <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">0. მართვის დონე (როლი)</h3>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5" id="roleButtonsGroup">
+            <button type="button" onclick="selectManagementRole('admin')" id="roleBtn-admin" class="role-tab-btn px-3 py-2.5 rounded-xl text-xs font-extrabold border transition flex items-center justify-center gap-2 bg-main-primary text-white border-main-primary">
+              <i class="fa-solid fa-user-gear"></i> ადმინ პანელი
+            </button>
+            <button type="button" onclick="selectManagementRole('resource')" id="roleBtn-resource" class="role-tab-btn px-3 py-2.5 rounded-xl text-xs font-extrabold border transition flex items-center justify-center gap-2 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+              <i class="fa-solid fa-building-columns"></i> რესურსცენტრი
+            </button>
+            <button type="button" onclick="selectManagementRole('director')" id="roleBtn-director" class="role-tab-btn px-3 py-2.5 rounded-xl text-xs font-extrabold border transition flex items-center justify-center gap-2 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+              <i class="fa-solid fa-user-tie"></i> დირექტორი
+            </button>
+            <button type="button" onclick="selectManagementRole('ministry')" id="roleBtn-ministry" class="role-tab-btn px-3 py-2.5 rounded-xl text-xs font-extrabold border transition flex items-center justify-center gap-2 bg-white text-slate-700 border-slate-300 hover:bg-slate-100">
+              <i class="fa-solid fa-landmark"></i> სამინისტრო
+            </button>
+          </div>
+          <div class="mt-3 text-xs text-slate-600 font-medium bg-white px-3.5 py-2.5 rounded-xl border border-slate-200/80" id="roleScopeDescription">
+            ადმინ პანელი: სრული ტექნიკური კონტროლი — დიზაინი, ზარის ხმა, განრიგი და განცხადებები.
+          </div>
+        </div>
+
+        <!-- 1. DESIGN & LAYOUT -->
+        <div id="sectionDesignLayout">
+          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">1. დიზაინი & განლაგება (ეკრანის მართვა)</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">ეკრანის განლაგება</label>
+              <select id="cfgLayout" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-bold focus:ring-2 focus:ring-emerald-500 outline-none bg-slate-50">
+                <option value="slides-left">მარცხნივ სლაიდები / მარჯვნივ დრო & განრიგი</option>
+                <option value="slides-right">მარცხნივ დრო & განრიგი / მარჯვნივ სლაიდები</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">ფერადი თემა</label>
+              <select id="cfgTheme" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-emerald-500 outline-none">
+                <option value="theme-emerald">Emerald Teal (ზურმუხტისფერი)</option>
+                <option value="theme-blue">Royal Blue (ლურჯი)</option>
+                <option value="theme-purple">Deep Purple (იასამნისფერი)</option>
+                <option value="theme-crimson">Crimson Red (წითელი)</option>
+                <option value="theme-dark">Modern Dark (მუქი თემა)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. SCHOOL INFO & GOVERNANCE NOTES -->
+        <div id="sectionSchoolMeta">
+          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">2. სკოლის მონაცემები & მმართველობის მითითებები</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">სკოლის დასახელება</label>
+              <input type="text" id="cfgSchoolTitle" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-emerald-500 outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">ქვესათაური</label>
+              <input type="text" id="cfgSchoolSubtitle" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-emerald-500 outline-none" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">ლოგოს ატვირთვა (URL / Data URL)</label>
+              <input type="text" id="cfgLogoUrl" placeholder="https://... ან data:image/..." class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-emerald-500 outline-none" />
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">ან ატვირთეთ ფაილი</label>
+              <input type="file" id="cfgLogoFile" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 cursor-pointer" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">რესურსცენტრის მითითება</label>
+              <input type="text" id="cfgResourceNote" placeholder="მუნიციპალური რესურსცენტრი..." class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-xs font-medium outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">დირექტორის განკარგულება</label>
+              <input type="text" id="cfgDirectorNote" placeholder="სკოლის დირექტორის ბრძანება..." class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-xs font-medium outline-none" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-600 mb-1.5">სამინისტროს ცირკულარი</label>
+              <input type="text" id="cfgMinistryNote" placeholder="განათლების სამინისტროს სტანდარტი..." class="w-full border border-slate-300 rounded-xl px-3.5 py-2 text-xs font-medium outline-none" />
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. BELL SOUND -->
+        <div id="sectionBellSound">
+          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">3. ზარის ხმის პარამეტრები</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">ზარის ხმა (ჩართვა)</label>
+              <select id="cfgSoundEnabled" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-emerald-500 outline-none">
+                <option value="true">კი (ჩართულია)</option>
+                <option value="false">არა (გამორთულია)</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-bold text-slate-700 mb-2">მელოდიის ტიპი</label>
+              <select id="cfgSoundType" class="w-full border border-slate-300 rounded-xl px-4 py-2.5 text-sm font-medium focus:ring-2 focus:ring-emerald-500 outline-none">
+                <option value="classic">კლასიკური ზარი</option>
+                <option value="chime">Gentle Chime</option>
+                <option value="digital">ციფრული Signal</option>
+              </select>
+            </div>
+            <div class="pt-0 sm:pt-7">
+              <button type="button" onclick="testBellSound()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-sm rounded-xl transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-volume-high text-main-primary"></i> ხმის ტესტირება
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. SCHEDULE -->
+        <div id="sectionSchedule">
+          <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4">4. გაკვეთილების დროები</h3>
+          <div class="space-y-3" id="adminScheduleInputs"></div>
+        </div>
+
+        <!-- 5. SLIDES -->
+        <div id="sectionSlides">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">5. განცხადებების (სლაიდების) მართვა</h3>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-bold text-slate-600">სლაიდის ხანგრძლივობა (წამი):</span>
+              <input type="number" id="cfgSlideDuration" min="3" max="60" value="7" class="w-20 border border-slate-300 rounded-lg px-3 py-1 text-sm font-bold text-center outline-none" />
+            </div>
+          </div>
+          <div class="space-y-4" id="adminSlidesList"></div>
+          <button type="button" onclick="addNewSlideAdmin()" class="mt-4 w-full py-3 border-2 border-dashed border-slate-300 hover:border-slate-400 text-slate-600 font-bold rounded-2xl transition flex items-center justify-center gap-2">
+            <i class="fa-solid fa-plus"></i> ახალი განცხადების დამატება
+          </button>
+        </div>
+
+      </div>
+
+      <div class="px-6 sm:px-8 py-4 border-t border-slate-200 bg-slate-50 flex justify-end gap-3">
+        <button type="button" onclick="toggleAdminModal()" class="px-6 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-bold text-sm hover:bg-slate-100 transition">გაუქმება</button>
+        <button type="button" onclick="saveAdminSettings()" class="px-6 py-2.5 rounded-xl bg-main-primary text-white font-bold text-sm hover:opacity-90 transition shadow-md">შენახვა & განახლება</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- JS LOGIC ENGINE -->
+  <script>
+    const PHOTO_ASSETS = {
+      schoolLogo: "",
+      techSpark: "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAP//////////////////////////////////////////////////////////////////////////////////////wgALCAADAAABAREA/8QAFBABAAAAAAAAAAAAAAAAAAAAAP/aAAgBAQABPxA=",
+      welcomeSchool: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop",
+      studentMeeting: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop",
+      defaultNewSlide: "https://images.unsplash.com/photo-1580582932707-520aed937b7b?q=80&w=1200&auto=format&fit=crop"
+    };
+
+    const GEORGIA_REGIONAL_DATA = {
+      "თბილისი": {
+        cities: ["თბილისი (მთაწმინდა)", "თბილისი (ვაკე)", "თბილისი (საბურთალო)", "თბილისი (გლდანი)", "თბილისი (ისანი)"],
+        schools: {
+          "თბილისი (მთაწმინდა)": ["1-ლი საჯარო სკოლა", "მე-5 საჯარო სკოლა", "53-ე საჯარო სკოლა"],
+          "თბილისი (ვაკე)": ["2-ე საჯარო სკოლა", "55-ე საჯარო სკოლა", "60-ე საჯარო სკოლა"],
+          "თბილისი (საბურთალო)": ["იმედი - საავტორო სკოლა", "აზრი - კერძო სკოლა", "126-ე საჯარო სკოლა"],
+          "თბილისი (გლდანი)": ["174-ე საჯარო სკოლა", "175-ე საჯარო სკოლა", "191-ე საჯარო სკოლა"],
+          "თბილისი (ისანი)": ["86-ე საჯარო სკოლა", "103-ე საჯარო სკოლა"]
+        }
+      },
+      "იმერეთი": {
+        cities: ["ქუთაისი", "ზესტაფონი", "სამტრედია", "ბაღდათი"],
+        schools: {
+          "ქუთაისი": ["ქუთაისის 1-ლი საჯარო სკოლა", "ქუთაისის მე-2 საჯარო სკოლა", "ქუთაისის 3-ე საჯარო სკოლა", "ქუთაისის 7-ე საჯარო სკოლა"],
+          "ზესტაფონი": ["ზესტაფონის 1-ლი საჯარო სკოლა", "ზესტაფონის მე-2 საჯარო სკოლა"],
+          "სამტრედია": ["სამტრედიის 1-ლი საჯარო სკოლა"],
+          "ბაღდათი": ["ბაღდათის 1-ლი საჯარო სკოლა"]
+        }
+      },
+      "აჭარა": {
+        cities: ["ბათუმი", "ქობულეთი", "ხელვაჩაური"],
+        schools: {
+          "ბათუმი": ["ბათუმის 1-ლი საჯარო სკოლა", "ბათუმის მე-2 საჯარო სკოლა", "ბათუმის 7-ე საჯარო სკოლა", "XXI საუკუნე"],
+          "ქობულეთი": ["ქობულეთის 1-ლი საჯარო სკოლა"],
+          "ხელვაჩაური": ["ხელვაჩაურის საჯარო სკოლა"]
+        }
+      },
+      "სამეგრელო-ზემო სვანეთი": {
+        cities: ["ზუგდიდი", "ფოთი", "სენაკი", "მარტვილი"],
+        schools: {
+          "ზუგდიდი": ["ზუგდიდის 1-ლი საჯარო სკოლა", "ზუგდიდის მე-2 საჯარო სკოლა", "ზუგდიდის 7-ე საჯარო სკოლა"],
+          "ფოთი": ["ფოთის 1-ლი საჯარო სკოლა", "ფოთის მე-2 საჯარო სკოლა", "ფოთის 3-ე საჯარო სკოლა", "ფოთის 7-ე საჯარო სკოლა"],
+          "სენაკი": ["სენაკის 1-ლი საჯარო სკოლა"],
+          "მარტვილი": ["მარტვილის 1-ლი საჯარო სკოლა"]
+        }
+      },
+      "კახეთი": {
+        cities: ["თელავი", "გურჯაანი", "ყვარელი"],
+        schools: {
+          "თელავი": ["თელავის 1-ლი საჯარო სკოლა", "თელავის მე-2 საჯარო სკოლა", "თელავის 7-ე საჯარო სკოლა"],
+          "გურჯაანი": ["გურჯაანის 1-ლი საჯარო სკოლა"],
+          "ყვარელი": ["ყვარლის 1-ლი საჯარო სკოლა"]
+        }
+      }
+    };
+
+    const ROLE_META = {
+      admin: {
+        label: "ადმინ პანელი",
+        desc: "ადმინ პანელი: სრული ტექნიკური კონტროლი — დიზაინი, ზარის ხმა, განრიგი და განცხადებები."
+      },
+      resource: {
+        label: "რესურსცენტრი",
+        desc: "რესურსცენტრი: მუნიციპალური კოორდინაცია, განცხადებების მართვა და სკოლის მითითებები."
+      },
+      director: {
+        label: "დირექტორი",
+        desc: "დირექტორი: სკოლის შიდა განრიგის, განცხადებებისა და სასკოლო მონაცემების მართვა."
+      },
+      ministry: {
+        label: "სამინისტრო",
+        desc: "სამინისტრო: უწყებრივი სტანდარტების, სტატუსის, განცხადებებისა და ცირკულარების კონტროლი."
+      }
+    };
+
+    const DEFAULT_CONFIG = {
+      activeRole: "admin",
+      resourceNote: "",
+      directorNote: "",
+      ministryNote: "",
+      schoolTitle: "1-ლი საჯარო სკოლა",
+      schoolSubtitle: "საინფორმაციო მონიტორი",
+      logoUrl: PHOTO_ASSETS.schoolLogo,
+      layout: "slides-left",
+      theme: "theme-emerald",
+      soundEnabled: "true",
+      soundType: "classic",
+      slideDuration: 7,
+      schedule: [
+        { id: 1, name: "1-ლი გაკვეთილი", start: "08:45", end: "09:25" },
+        { id: 2, name: "მე-2 გაკვეთილი", start: "09:30", end: "10:10" },
+        { id: 3, name: "მე-3 გაკვეთილი", start: "10:15", end: "10:55" },
+        { id: 4, name: "მე-4 გაკვეთილი", start: "11:05", end: "11:45" },
+        { id: 5, name: "მე-5 გაკვეთილი", start: "11:50", end: "12:30" },
+        { id: 6, name: "მე-6 გაკვეთილი", start: "12:35", end: "13:15" },
+        { id: 7, name: "მე-7 გაკვეთილი", start: "13:20", end: "14:00" }
+      ],
+      slides: [
+        {
+          title: "TechSpark — სასკოლო სტარტაპ კონკურსი",
+          desc: "გუნდური მუშაობა • პრიზი 5000₾ • ასაკი: 15+ | საქართველოს ინოვაციების და ტექნოლოგიების სააგენტო, ტექნოპარკი საქართველო და Rethink Innovation Center.",
+          img: PHOTO_ASSETS.techSpark
+        },
+        {
+          title: "მოგესალმებით სკოლაში!",
+          desc: "გისურვებთ წარმატებულ და ნაყოფიერ სასწავლო დღეს.",
+          img: PHOTO_ASSETS.welcomeSchool
+        },
+        {
+          title: "საინფორმაციო შეხვედრა",
+          desc: "პარასკევს, 15:00 საათზე გაიმართება მოსწავლეთა თვითმმართველობის კრება.",
+          img: PHOTO_ASSETS.studentMeeting
+        }
+      ]
+    };
+
+    let selectedRegion = "";
+    let selectedCity = "";
+    let selectedSchool = "";
+
+    let config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    let draftRole = "admin";
+    let currentSlideIndex = 0;
+    let slideTimer = null;
+    let lastRingStatus = null;
+
+    function getSchoolStorageKey(name) {
+      return 'school_config_v9_' + name.replace(/\s+/g, '_');
+    }
+
+    function loadSchoolConfig(schoolName) {
+      const key = getSchoolStorageKey(schoolName);
+      const saved = localStorage.getItem(key);
+      if (saved) {
+        return { ...DEFAULT_CONFIG, ...JSON.parse(saved) };
+      }
+      return {
+        ...DEFAULT_CONFIG,
+        schoolTitle: schoolName,
+        slides: JSON.parse(JSON.stringify(DEFAULT_CONFIG.slides)),
+        schedule: JSON.parse(JSON.stringify(DEFAULT_CONFIG.schedule))
+      };
+    }
+
+    function saveCurrentSchoolConfig() {
+      const key = getSchoolStorageKey(config.schoolTitle);
+      try {
+        localStorage.setItem(key, JSON.stringify(config));
+      } catch (e) {
+        alert("ფოტოს ზომა ძალიან დიდია მეხსიერებაში შესანახად. სცადეთ უფრო მცირე ზომის სურათი.");
+      }
+    }
+
+    function checkUrlHash() {
+      const hash = window.location.hash;
+      if (hash.startsWith('#school=')) {
+        const schoolName = decodeURIComponent(hash.replace('#school=', '')).replace(/_/g, ' ');
+        if (schoolName) {
+          config = loadSchoolConfig(schoolName);
+          applyConfig();
+          renderScheduleList();
+          renderSlides();
+          startSlideCarousel();
+          document.getElementById('landingPage').classList.add('hidden');
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function init() {
+      populateRegionDropdown();
+      const loadedFromHash = checkUrlHash();
+      if (!loadedFromHash) {
+        applyConfig();
+        renderScheduleList();
+        renderSlides();
+        startSlideCarousel();
+      }
+      startClock();
+    }
+
+    window.addEventListener('hashchange', checkUrlHash);
+
+    function toggleFullScreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch((err) => {
+          console.warn(`Full screen error: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      const icon = document.getElementById('fullScreenIcon');
+      const btn = document.getElementById('fullScreenBtn');
+      const header = document.getElementById('dashboardHeader');
+      if (document.fullscreenElement) {
+        header.classList.add('hidden');
+        icon.classList.remove('fa-expand');
+        icon.classList.add('fa-compress');
+        btn.title = "სრული ეკრანიდან გამოსვლა";
+      } else {
+        header.classList.remove('hidden');
+        icon.classList.remove('fa-compress');
+        icon.classList.add('fa-expand');
+        btn.title = "სრული ეკრანი";
+      }
+    });
+
+    function toggleDropdown(id, event) {
+      if (event) event.stopPropagation();
+      const el = document.getElementById(id);
+      const isHidden = el.classList.contains('hidden');
+      closeAllDropdowns();
+
+      if (isHidden) {
+        el.classList.remove('hidden');
+        setTimeout(() => {
+          el.classList.remove('opacity-0', 'scale-95');
+        }, 10);
+
+        const arrow = document.getElementById(id + 'Arrow');
+        if (arrow) arrow.classList.add('rotate-180');
+      }
+    }
+
+    function closeAllDropdowns(event) {
+      ['ddRegion', 'ddCity', 'ddSchool'].forEach(id => {
+        const el = document.getElementById(id);
+        const arrow = document.getElementById(id + 'Arrow');
+        if (el && !el.classList.contains('hidden')) {
+          el.classList.add('opacity-0', 'scale-95');
+          setTimeout(() => el.classList.add('hidden'), 150);
+        }
+        if (arrow) arrow.classList.remove('rotate-180');
+      });
+    }
+
+    function populateRegionDropdown() {
+      const menu = document.getElementById('ddRegion');
+      menu.innerHTML = `<div onclick="selectRegion('', 'ყველა რეგიონი')" class="custom-dropdown-item px-4 py-2.5 text-sm font-bold text-slate-700 cursor-pointer">ყველა რეგიონი</div>`;
+
+      for (let reg in GEORGIA_REGIONAL_DATA) {
+        menu.innerHTML += `<div onclick="selectRegion('${reg}', '${reg}')" class="custom-dropdown-item px-4 py-2.5 text-sm font-bold text-slate-700 cursor-pointer">${reg}</div>`;
+      }
+    }
+
+    function selectRegion(val, labelText) {
+      selectedRegion = val;
+      selectedCity = "";
+      selectedSchool = "";
+
+      document.getElementById('ddRegionLabel').innerText = labelText;
+      
+      const cityBtn = document.getElementById('ddCityBtn');
+      const schoolBtn = document.getElementById('ddSchoolBtn');
+      
+      document.getElementById('ddCityLabel').innerText = "აირჩიეთ ქალაქი";
+      document.getElementById('ddSchoolLabel').innerText = "ჯერ აირჩიეთ ქალაქი";
+
+      schoolBtn.classList.add('opacity-60', 'pointer-events-none');
+
+      const cityMenu = document.getElementById('ddCity');
+      cityMenu.innerHTML = "";
+
+      if (val && GEORGIA_REGIONAL_DATA[val]) {
+        cityBtn.classList.remove('opacity-60', 'pointer-events-none');
+        GEORGIA_REGIONAL_DATA[val].cities.forEach(city => {
+          cityMenu.innerHTML += `<div onclick="selectCity('${city}', '${city}')" class="custom-dropdown-item px-4 py-2.5 text-sm font-bold text-slate-700 cursor-pointer">${city}</div>`;
+        });
+      } else {
+        cityBtn.classList.add('opacity-60', 'pointer-events-none');
+      }
+
+      closeAllDropdowns();
+    }
+
+    function selectCity(val, labelText) {
+      selectedCity = val;
+      selectedSchool = "";
+
+      document.getElementById('ddCityLabel').innerText = labelText;
+      
+      const schoolBtn = document.getElementById('ddSchoolBtn');
+      document.getElementById('ddSchoolLabel').innerText = "აირჩიეთ სკოლა";
+
+      const schoolMenu = document.getElementById('ddSchool');
+      schoolMenu.innerHTML = "";
+
+      if (selectedRegion && val && GEORGIA_REGIONAL_DATA[selectedRegion].schools[val]) {
+        schoolBtn.classList.remove('opacity-60', 'pointer-events-none');
+        GEORGIA_REGIONAL_DATA[selectedRegion].schools[val].forEach(school => {
+          schoolMenu.innerHTML += `<div onclick="selectSchool('${school}', '${school}')" class="custom-dropdown-item px-4 py-2.5 text-sm font-bold text-slate-700 cursor-pointer">${school}</div>`;
+        });
+      } else {
+        schoolBtn.classList.add('opacity-60', 'pointer-events-none');
+      }
+
+      closeAllDropdowns();
+    }
+
+    function selectSchool(val, labelText) {
+      selectedSchool = val;
+      document.getElementById('ddSchoolLabel').innerText = labelText;
+      closeAllDropdowns();
+    }
+
+    function openDashboardDirect() {
+      if (selectedSchool) {
+        window.location.hash = `#school=${encodeURIComponent(selectedSchool.replace(/\s+/g, '_'))}`;
+        config = loadSchoolConfig(selectedSchool);
+      } else {
+        config = loadSchoolConfig(DEFAULT_CONFIG.schoolTitle);
+      }
+
+      applyConfig();
+      renderScheduleList();
+      renderSlides();
+      startSlideCarousel();
+      document.getElementById('landingPage').classList.add('hidden');
+    }
+
+    function backToLanding() {
+      window.location.hash = '';
+      document.getElementById('landingPage').classList.remove('hidden');
+    }
+
+    function applyConfig() {
+      document.getElementById('appBody').className = `bg-slate-100 h-screen w-screen flex flex-col ${config.theme} transition-colors duration-300 overflow-hidden`;
+      document.getElementById('schoolTitle').innerText = config.schoolTitle;
+      document.getElementById('schoolSubtitle').innerText = config.schoolSubtitle;
+
+      const logoContainer = document.getElementById('schoolLogoContainer');
+      const logoImg = document.getElementById('schoolLogoImg');
+      
+      if (config.logoUrl) {
+        logoImg.src = config.logoUrl;
+        logoImg.classList.remove('hidden');
+        logoContainer.classList.remove('hidden');
+        logoContainer.classList.add('flex');
+      } else {
+        logoImg.classList.add('hidden');
+        logoContainer.classList.add('hidden');
+        logoContainer.classList.remove('flex');
+      }
+
+      const slidesSection = document.getElementById('slidesSection');
+      const scheduleSection = document.getElementById('scheduleSection');
+
+      if (config.layout === 'slides-right') {
+        slidesSection.className = "col-span-1 lg:col-span-9 flex flex-col gap-2.5 h-auto lg:h-full lg:order-2";
+        scheduleSection.className = "col-span-1 lg:col-span-3 flex flex-col gap-3 h-auto lg:h-full lg:order-1";
+      } else {
+        slidesSection.className = "col-span-1 lg:col-span-9 flex flex-col gap-2.5 h-auto lg:h-full lg:order-1";
+        scheduleSection.className = "col-span-1 lg:col-span-3 flex flex-col gap-3 h-auto lg:h-full lg:order-2";
+      }
+    }
+
+    function renderScheduleList() {
+      const listContainer = document.getElementById('scheduleList');
+      listContainer.innerHTML = '';
+
+      config.schedule.forEach((item) => {
+        const div = document.createElement('div');
+        div.id = `schedule-item-${item.id}`;
+        div.className = "flex justify-between items-center p-2 bg-slate-50 border border-slate-100 rounded-xl transition-all duration-300";
+        div.innerHTML = `
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-5 h-5 rounded-md bg-slate-200/70 text-slate-700 font-extrabold flex items-center justify-center text-[10px] flex-shrink-0">${item.id}</span>
+            <span class="font-bold text-slate-800 text-[11px] truncate">${item.name}</span>
+          </div>
+          <span class="font-mono text-[10px] font-semibold text-slate-500 flex-shrink-0 ml-1">${item.start}-${item.end}</span>
+        `;
+        listContainer.appendChild(div);
+      });
+    }
+
+    function startClock() {
+      updateTimeAndStatus();
+      setInterval(updateTimeAndStatus, 1000);
+    }
+
+    function timeToMinutes(timeStr) {
+      const [h, m] = timeStr.split(':').map(Number);
+      return h * 60 + m;
+    }
+
+    function updateTimeAndStatus() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('headerClock').innerText = `${h}:${m}:${s}`;
+
+      const currentMinutes = now.getHours() * 60 + now.getMinutes();
+      const currentSeconds = currentMinutes * 60 + now.getSeconds();
+
+      let activeLesson = null;
+      let breakPeriod = null;
+
+      for (let i = 0; i < config.schedule.length; i++) {
+        const item = config.schedule[i];
+        const startMin = timeToMinutes(item.start);
+        const endMin = timeToMinutes(item.end);
+
+        if (currentMinutes >= startMin && currentMinutes < endMin) {
+          activeLesson = { ...item, startMin, endMin };
+          break;
+        }
+
+        if (currentMinutes < startMin) {
+          if (i > 0) {
+            breakPeriod = { title: "შესვენება", endMin: startMin, targetTime: item.start };
+          }
+          break;
+        }
+      }
+
+      config.schedule.forEach(item => {
+        const el = document.getElementById(`schedule-item-${item.id}`);
+        if (el) el.className = "flex justify-between items-center p-2 bg-slate-50 border border-slate-100 rounded-xl transition-all duration-300";
+      });
+
+      const statusTitle = document.getElementById('statusTitle');
+      const targetBadge = document.getElementById('targetBadge');
+      const countdownDisplay = document.getElementById('countdownDisplay');
+      const progressBar = document.getElementById('progressBar');
+      const progressPercent = document.getElementById('progressPercent');
+      const currentLessonText = document.getElementById('currentLessonText');
+
+      if (activeLesson) {
+        const activeEl = document.getElementById(`schedule-item-${activeLesson.id}`);
+        if (activeEl) activeEl.className = "flex justify-between items-center p-2 rounded-xl active-card shadow-md";
+
+        statusTitle.innerText = "გაკვეთილის დასრულებამდე";
+        targetBadge.innerText = activeLesson.end;
+        currentLessonText.innerText = activeLesson.name;
+
+        const totalSec = (activeLesson.endMin - activeLesson.startMin) * 60;
+        const elapsedSec = currentSeconds - (activeLesson.startMin * 60);
+        const remainingSec = Math.max(0, totalSec - elapsedSec);
+
+        const remM = String(Math.floor(remainingSec / 60)).padStart(2, '0');
+        const remS = String(remainingSec % 60).padStart(2, '0');
+        countdownDisplay.innerText = `${remM}:${remS}`;
+
+        const pct = Math.min(100, Math.max(0, Math.floor((elapsedSec / totalSec) * 100)));
+        progressBar.style.width = `${pct}%`;
+        progressPercent.innerText = `${pct}%`;
+
+        checkBellRing(remainingSec);
+
+      } else if (breakPeriod) {
+        statusTitle.innerText = "შესვენება დასრულდება";
+        targetBadge.innerText = breakPeriod.targetTime;
+        currentLessonText.innerText = "დიდი შესვენება";
+
+        const endSec = breakPeriod.endMin * 60;
+        const remainingSec = Math.max(0, endSec - currentSeconds);
+
+        const remM = String(Math.floor(remainingSec / 60)).padStart(2, '0');
+        const remS = String(remainingSec % 60).padStart(2, '0');
+        countdownDisplay.innerText = `${remM}:${remS}`;
+
+        progressBar.style.width = `100%`;
+        progressPercent.innerText = `შესვენება`;
+
+        checkBellRing(remainingSec);
+
+      } else {
+        statusTitle.innerText = "სასწავლო დღე დასრულდა";
+        targetBadge.innerText = "დასვენება";
+        countdownDisplay.innerText = "00:00";
+        progressBar.style.width = "0%";
+        progressPercent.innerText = "0%";
+        currentLessonText.innerText = "გაკვეთილები არ მიმდინარეობს";
+      }
+    }
+
+    function checkBellRing(remainingSec) {
+      if (remainingSec === 0 && lastRingStatus !== 0) {
+        if (config.soundEnabled === "true") {
+          testBellSound();
+        }
+        lastRingStatus = 0;
+      } else if (remainingSec > 0) {
+        lastRingStatus = remainingSec;
+      }
+    }
+
+    function testBellSound() {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const soundType = config.soundType || "classic";
+
+      if (soundType === "classic") {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 2.5);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 2.5);
+      } else if (soundType === "chime") {
+        [523.25, 659.25, 783.99].forEach((freq, idx) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.frequency.setValueAtTime(freq, ctx.currentTime + idx * 0.2);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime + idx * 0.2);
+          gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + idx * 0.2 + 1.5);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(ctx.currentTime + idx * 0.2);
+          osc.stop(ctx.currentTime + idx * 0.2 + 1.5);
+        });
+      } else {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "square";
+        osc.frequency.setValueAtTime(440, ctx.currentTime);
+        gain.gain.setValueAtTime(0.1, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 1.2);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start();
+        osc.stop(ctx.currentTime + 1.2);
+      }
+    }
+
+    function renderSlides() {
+      const wrapper = document.getElementById('slidesWrapper');
+      const dotsContainer = document.getElementById('sliderDots');
+
+      if (!wrapper || !dotsContainer) return;
+
+      wrapper.innerHTML = '';
+      dotsContainer.innerHTML = '';
+
+      if (!config.slides || config.slides.length === 0) {
+        wrapper.innerHTML = '<div class="w-full h-full flex items-center justify-center text-slate-400 font-bold text-sm">განცხადებები არ არის დამატებული</div>';
+        return;
+      }
+
+      if (currentSlideIndex >= config.slides.length) {
+        currentSlideIndex = 0;
+      }
+
+      config.slides.forEach((slide, idx) => {
+        const div = document.createElement('div');
+        div.className = `absolute inset-0 transition-opacity duration-700 flex flex-col ${idx === currentSlideIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'}`;
+        div.innerHTML = `
+          <div class="h-2/3 sm:h-3/4 w-full relative overflow-hidden rounded-xl bg-slate-900 flex items-center justify-center">
+            <img src="${slide.img}" class="w-full h-full object-contain" alt="Slide" />
+          </div>
+          <div class="p-3 sm:p-4 flex-1 flex flex-col justify-center bg-white">
+            <h3 class="text-base sm:text-xl font-extrabold text-slate-800 mb-0.5">${slide.title}</h3>
+            <p class="text-slate-600 text-xs sm:text-sm leading-snug">${slide.desc}</p>
+          </div>
+        `;
+        wrapper.appendChild(div);
+
+        const dot = document.createElement('button');
+        dot.className = `w-2.5 h-2.5 rounded-full transition-all ${idx === currentSlideIndex ? 'bg-main-primary w-6' : 'bg-slate-300'}`;
+        dot.onclick = () => goToSlide(idx);
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    function goToSlide(idx) {
+      currentSlideIndex = idx;
+      renderSlides();
+    }
+
+    function startSlideCarousel() {
+      if (slideTimer) clearInterval(slideTimer);
+      slideTimer = setInterval(() => {
+        if (config.slides && config.slides.length > 0) {
+          currentSlideIndex = (currentSlideIndex + 1) % config.slides.length;
+          renderSlides();
+        }
+      }, (config.slideDuration || 7) * 1000);
+    }
+
+    function selectManagementRole(role) {
+      draftRole = role;
+      ['admin', 'resource', 'director', 'ministry'].forEach(r => {
+        const btn = document.getElementById(`roleBtn-${r}`);
+        if (!btn) return;
+        if (r === role) {
+          btn.className = "role-tab-btn px-3 py-2.5 rounded-xl text-xs font-extrabold border transition flex items-center justify-center gap-2 bg-main-primary text-white border-main-primary shadow-sm";
+        } else {
+          btn.className = "role-tab-btn px-3 py-2.5 rounded-xl text-xs font-extrabold border transition flex items-center justify-center gap-2 bg-white text-slate-700 border-slate-300 hover:bg-slate-100";
+        }
+      });
+
+      const descEl = document.getElementById('roleScopeDescription');
+      if (descEl && ROLE_META[role]) {
+        descEl.innerText = ROLE_META[role].desc;
+      }
+
+      const secDesign = document.getElementById('sectionDesignLayout');
+      const secBell = document.getElementById('sectionBellSound');
+      const secSchedule = document.getElementById('sectionSchedule');
+
+      if (role === 'admin') {
+        secDesign.classList.remove('hidden');
+        secBell.classList.remove('hidden');
+        secSchedule.classList.remove('hidden');
+      } else if (role === 'director') {
+        secDesign.classList.add('hidden');
+        secBell.classList.remove('hidden');
+        secSchedule.classList.remove('hidden');
+      } else if (role === 'resource' || role === 'ministry') {
+        secDesign.classList.add('hidden');
+        secBell.classList.add('hidden');
+        secSchedule.classList.add('hidden');
+      }
+    }
+
+    function toggleAdminModal() {
+      const modal = document.getElementById('adminModal');
+      const isHidden = modal.classList.contains('opacity-0');
+
+      if (isHidden) {
+        populateAdminFields();
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+      } else {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+      }
+    }
+
+    function handleSlideFileUpload(input, idx) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const urlInput = document.getElementById(`slide-img-${idx}`);
+          const previewImg = document.getElementById(`slide-preview-${idx}`);
+          if (urlInput) urlInput.value = e.target.result;
+          if (previewImg) previewImg.src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function updateSlidePreviewFromUrl(idx) {
+      const urlInput = document.getElementById(`slide-img-${idx}`);
+      const previewImg = document.getElementById(`slide-preview-${idx}`);
+      if (urlInput && previewImg) {
+        previewImg.src = urlInput.value;
+      }
+    }
+
+    function populateAdminFields() {
+      draftRole = config.activeRole || "admin";
+      selectManagementRole(draftRole);
+
+      document.getElementById('cfgLayout').value = config.layout;
+      document.getElementById('cfgTheme').value = config.theme;
+      document.getElementById('cfgSchoolTitle').value = config.schoolTitle;
+      document.getElementById('cfgSchoolSubtitle').value = config.schoolSubtitle;
+      document.getElementById('cfgLogoUrl').value = config.logoUrl || '';
+      document.getElementById('cfgResourceNote').value = config.resourceNote || '';
+      document.getElementById('cfgDirectorNote').value = config.directorNote || '';
+      document.getElementById('cfgMinistryNote').value = config.ministryNote || '';
+      document.getElementById('cfgSoundEnabled').value = config.soundEnabled;
+      document.getElementById('cfgSoundType').value = config.soundType;
+      document.getElementById('cfgSlideDuration').value = config.slideDuration;
+
+      const schContainer = document.getElementById('adminScheduleInputs');
+      schContainer.innerHTML = '';
+      config.schedule.forEach((item, idx) => {
+        const row = document.createElement('div');
+        row.className = "flex items-center gap-3 bg-slate-50 p-2.5 rounded-xl border border-slate-200";
+        row.innerHTML = `
+          <span class="font-bold text-slate-700 text-sm w-28">${item.name}:</span>
+          <input type="time" value="${item.start}" id="sch-start-${idx}" class="border border-slate-300 rounded-lg px-2 py-1 text-sm font-mono outline-none" />
+          <span class="text-slate-400 font-bold">-</span>
+          <input type="time" value="${item.end}" id="sch-end-${idx}" class="border border-slate-300 rounded-lg px-2 py-1 text-sm font-mono outline-none" />
+        `;
+        schContainer.appendChild(row);
+      });
+
+      const slideContainer = document.getElementById('adminSlidesList');
+      slideContainer.innerHTML = '';
+      (config.slides || []).forEach((slide, idx) => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-3 relative slide-admin-card";
+        card.innerHTML = `
+          <button type="button" onclick="removeSlideAdmin(${idx})" class="absolute top-3 right-3 text-red-500 hover:text-red-700 text-sm font-bold" title="წაშლა">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+          <div class="pr-6">
+            <label class="block text-xs font-bold text-slate-500 mb-1">განცხადების სათაური</label>
+            <input type="text" value="${slide.title}" id="slide-title-${idx}" placeholder="სლაიდის სათაური" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm font-bold outline-none bg-white" />
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-500 mb-1">აღწერა</label>
+            <textarea id="slide-desc-${idx}" placeholder="აღწერა" class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-sm outline-none resize-none h-16 bg-white">${slide.desc}</textarea>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
+            <div class="sm:col-span-3">
+              <img id="slide-preview-${idx}" src="${slide.img}" class="w-full h-20 object-contain rounded-xl border border-slate-300 bg-slate-900" alt="Preview" />
+            </div>
+            <div class="sm:col-span-9 space-y-2">
+              <div>
+                <label class="block text-xs font-bold text-slate-500 mb-1">ფოტოს ატვირთვა ფაილიდან</label>
+                <input type="file" accept="image/*" onchange="handleSlideFileUpload(this, ${idx})" class="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-emerald-50 file:text-main-primary hover:file:bg-emerald-100 cursor-pointer" />
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-500 mb-1">ან ფოტოს ბმული / Base64 კოდი</label>
+                <input type="text" value="${slide.img}" id="slide-img-${idx}" oninput="updateSlidePreviewFromUrl(${idx})" placeholder="https://... ან data:image/..." class="w-full border border-slate-300 rounded-lg px-3 py-1.5 text-xs outline-none font-mono bg-white" />
+              </div>
+            </div>
+          </div>
+        `;
+        slideContainer.appendChild(card);
+      });
+    }
+
+    function addNewSlideAdmin() {
+      if (!config.slides) config.slides = [];
+      config.slides.push({
+        title: "ახალი განცხადება",
+        desc: "ჩაწერეთ განცხადების ტექსტი აქ...",
+        img: PHOTO_ASSETS.defaultNewSlide
+      });
+      populateAdminFields();
+    }
+
+    function removeSlideAdmin(idx) {
+      config.slides.splice(idx, 1);
+      populateAdminFields();
+    }
+
+    function saveAdminSettings() {
+      config.activeRole = draftRole;
+      config.layout = document.getElementById('cfgLayout').value;
+      config.theme = document.getElementById('cfgTheme').value;
+      config.schoolTitle = document.getElementById('cfgSchoolTitle').value;
+      config.schoolSubtitle = document.getElementById('cfgSchoolSubtitle').value;
+      config.resourceNote = document.getElementById('cfgResourceNote').value;
+      config.directorNote = document.getElementById('cfgDirectorNote').value;
+      config.ministryNote = document.getElementById('cfgMinistryNote').value;
+      config.soundEnabled = document.getElementById('cfgSoundEnabled').value;
+      config.soundType = document.getElementById('cfgSoundType').value;
+      config.slideDuration = parseInt(document.getElementById('cfgSlideDuration').value) || 7;
+
+      config.schedule.forEach((item, idx) => {
+        const st = document.getElementById(`sch-start-${idx}`);
+        const en = document.getElementById(`sch-end-${idx}`);
+        if (st && en) {
+          item.start = st.value;
+          item.end = en.value;
+        }
+      });
+
+      config.slides = [];
+      const slideCards = document.querySelectorAll('.slide-admin-card');
+      slideCards.forEach((card, idx) => {
+        const titleInput = document.getElementById(`slide-title-${idx}`);
+        const descInput = document.getElementById(`slide-desc-${idx}`);
+        const imgInput = document.getElementById(`slide-img-${idx}`);
+        if (titleInput && descInput && imgInput) {
+          config.slides.push({
+            title: titleInput.value,
+            desc: descInput.value,
+            img: imgInput.value
+          });
+        }
+      });
+
+      const fileInput = document.getElementById('cfgLogoFile');
+      if (fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          config.logoUrl = e.target.result;
+          finishSave();
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        config.logoUrl = document.getElementById('cfgLogoUrl').value;
+        finishSave();
+      }
+    }
+
+    function finishSave() {
+      saveCurrentSchoolConfig();
+      window.location.hash = `#school=${encodeURIComponent(config.schoolTitle.replace(/\s+/g, '_'))}`;
+      
+      applyConfig();
+      renderScheduleList();
+      renderSlides();
+      startSlideCarousel();
+      toggleAdminModal();
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>
